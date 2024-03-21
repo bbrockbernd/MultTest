@@ -6,11 +6,10 @@ import org.junit.Test
 import org.multiverse.api.StmUtils
 import org.multiverse.api.callables.TxnCallable
 import org.multiverse.api.references.TxnInteger
-import org.multiverse.api.references.TxnLong
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger
 
 @ModelCheckingCTest
-class BankAccountLincheckTest {
+class MultiverseTest {
 
     private val nr: TxnInteger = GammaTxnInteger(0)
 
