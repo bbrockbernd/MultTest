@@ -11,7 +11,7 @@ import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger
 @ModelCheckingCTest
 class MultiverseTest {
 
-    private val nr: TxnInteger = GammaTxnInteger(0)
+    private lateinit var nr: TxnInteger
 
     @Operation
     fun increment() = StmUtils.atomic(TxnCallable { nr.increment() })
@@ -23,5 +23,8 @@ class MultiverseTest {
     fun getBalance(): Int = nr.atomicGet()
 
     @Test // JUnit
-    fun stressTest() = StressOptions().check(this::class)
+    fun stressTest() {
+            nr = GammaTxnInteger(0)
+            StressOptions().check(this::class)
+        }
 }
