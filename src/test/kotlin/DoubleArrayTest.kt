@@ -1,4 +1,3 @@
-import com.google.common.util.concurrent.AtomicDoubleArray
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
 import org.jetbrains.kotlinx.lincheck.check
@@ -8,8 +7,8 @@ import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
 
 @Param(name = "index", gen = IntGen::class, conf = "1:2")
-class AtomicDoubleArrayTest {
-    private val array: AtomicDoubleArray = AtomicDoubleArray(3)
+class DoubleArrayTest {
+    private val array: DoubleArray = DoubleArray(3)
 
     @Operation
     fun set(@Param(name = "index") index: Int, value: Double) {
@@ -22,22 +21,17 @@ class AtomicDoubleArrayTest {
     }
 
     @Operation
-    fun addAndGet(@Param(name = "index") index: Int, delta: Double): Double {
-        return array.addAndGet(index, delta)
-    }
-    
-    @Operation
-    fun length(): Int {
-        return array.length()
+    fun size(): Int {
+        return array.size
     }
 
     @Test
     fun modelTest() {
-        ModelCheckingOptions().check(AtomicDoubleArrayTest::class)
+        ModelCheckingOptions().check(this::class)
     }
 
     @Test
     fun stressTest() {
-        StressOptions().check(AtomicDoubleArrayTest::class)
+        StressOptions().check(this::class)
     }
 }
