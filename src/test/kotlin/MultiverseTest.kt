@@ -1,6 +1,7 @@
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingCTest
+import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
 import org.multiverse.api.StmUtils
@@ -25,6 +26,6 @@ class MultiverseTest {
     @Test // JUnit
     fun stressTest() {
             nr = GammaTxnInteger(0)
-            StressOptions().check(this::class)
+        ModelCheckingOptions().check(this::class)
         }
 }

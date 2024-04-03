@@ -22,7 +22,7 @@ class TxnRefTest {
     @Test
     fun stressTest() {
         ref = GammaTxnRef<Int>(0)
-        StressOptions().check(this::class)
+        ModelCheckingOptions().check(this::class)
     }
     
     
