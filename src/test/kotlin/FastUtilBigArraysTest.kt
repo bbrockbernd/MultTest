@@ -18,6 +18,11 @@ class FastUtilBigArraysTest {
         BigArrays.addAndGet(array, index, value)
     }
 
+    @Operation
+    fun compareAndSet(@Param(name = "index") index: Long, value: Int, expected: Int) {
+        BigArrays.compareAndSet(array, index, expected, value)
+    }
+
     @Test
     fun modelTest() {
         ModelCheckingOptions().check(FastUtilBigArraysTest::class)
