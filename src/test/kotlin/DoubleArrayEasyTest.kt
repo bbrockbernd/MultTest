@@ -3,33 +3,30 @@ import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
-import org.multiverse.api.references.TxnRef
-import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef
 
-class TxnRefTest {
-    private lateinit var ref: TxnRef<Int>
+class DoubleArrayEasyTest {
+    
+    private val doubleArray: DoubleArray = DoubleArray(1)
+    private var myDouble: Double = 0.0
+    private var myInt: Int = 0
     
     @Operation
-    fun set(value: Int) {
-        ref.set(value)
-    }
+//    fun set(double: Double) { this.doubleArray[0] = double }
+//    fun set(double: Double) { myDouble = double }
+    fun set(i: Int) { myInt = i }
     
     @Operation
-    fun get(): Int {
-        return ref.get()
-    }
+//    fun get(): Double = doubleArray[0]
+//    fun get(): Double = myDouble
+    fun get(): Int = myInt
     
     @Test
     fun stressTest() {
-        ref = GammaTxnRef<Int>(0)
         StressOptions().check(this::class)
     }
     
     @Test
     fun modelTest() {
-        ref = GammaTxnRef<Int>(0)
         ModelCheckingOptions().check(this::class)
     }
-    
-    
 }

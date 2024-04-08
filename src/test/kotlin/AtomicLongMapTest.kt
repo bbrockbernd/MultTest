@@ -4,6 +4,7 @@ import org.jetbrains.kotlinx.lincheck.annotations.Param
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.paramgen.StringGen
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
+import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
 
 @Param(name = "key", gen = StringGen::class, conf = "1:2")
@@ -26,8 +27,12 @@ class AtomicLongMapTest {
     }
 
     @Test
-    fun Test() {
+    fun ModelTest() {
         ModelCheckingOptions().check(AtomicLongMapTest::class)
-//        StressOptions().check(AtomicLongMapTest::class)
+    }
+    
+    @Test
+    fun StressTest() {
+        StressOptions().check(AtomicLongMapTest::class)
     }
 }
