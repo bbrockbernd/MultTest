@@ -19,12 +19,32 @@ class FastUtilBigArraysTest {
     }
 
     @Operation
-    fun decrementAndGet(@Param(name = "index") index: Long, value: Int) {
+    fun getAndAdd(@Param(name = "index") index: Long, value: Int) {
+        BigArrays.getAndAdd(array, index, value)
+    }
+
+    @Operation
+    fun getAndSet(@Param(name = "index") index: Long, value: Int) {
+        BigArrays.getAndSet(array, index, value)
+    }
+
+    @Operation
+    fun getAndDecrement(@Param(name = "index") index: Long) {
+        BigArrays.getAndDecrement(array, index)
+    }
+
+    @Operation
+    fun getAndIncrement(@Param(name = "index") index: Long) {
+        BigArrays.getAndIncrement(array, index)
+    }
+
+    @Operation
+    fun decrementAndGet(@Param(name = "index") index: Long) {
         BigArrays.decrementAndGet(array, index)
     }
 
     @Operation
-    fun incrementAndGet(@Param(name = "index") index: Long, value: Int) {
+    fun incrementAndGet(@Param(name = "index") index: Long) {
         BigArrays.incrementAndGet(array, index)
     }
 
