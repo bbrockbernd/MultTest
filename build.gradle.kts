@@ -15,6 +15,7 @@ dependencies {
     implementation("org.multiverse:multiverse-core:0.7.0")
     testImplementation("junit:junit:4.13")
     implementation("com.google.guava:guava:30.1-jre")
+    implementation("it.unimi.dsi:fastutil:8.5.13")
 }
 
 kotlin {

@@ -1,0 +1,30 @@
+import it.unimi.dsi.fastutil.BigArrays
+import org.jetbrains.kotlinx.lincheck.annotations.Operation
+import org.jetbrains.kotlinx.lincheck.annotations.Param
+import org.jetbrains.kotlinx.lincheck.check
+import org.jetbrains.kotlinx.lincheck.paramgen.IntGen
+import org.jetbrains.kotlinx.lincheck.paramgen.LongGen
+import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
+import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
+import org.junit.Test
+import java.util.concurrent.atomic.AtomicIntegerArray
+
+@Param(name = "index", gen = LongGen::class, conf = "0:5")
+class FastUtilBigArraysTest {
+    private val array: Array<AtomicIntegerArray> = Array(5) { AtomicIntegerArray(5) }
+
+    @Operation
+    fun addAndGet(@Param(name = "index") index: Long, value: Int) {
+        BigArrays.addAndGet(array, index, value)
+    }
+
+    @Test
+    fun modelTest() {
+        ModelCheckingOptions().check(FastUtilBigArraysTest::class)
+    }
+
+    @Test
+    fun stressTest() {
+        StressOptions().check(FastUtilBigArraysTest::class)
+    }
+}
