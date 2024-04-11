@@ -3,7 +3,9 @@
 *By [Alexandru Dumtiriu](https://github.com/Alexandru-Dumitriu)
 and [Bob Brockbernd](https://github.com/bbrockbernd)*.
 
+# Current state of concurrency testing in Java
 
+TODO
 
 # What is Lincheck?
 
@@ -17,15 +19,35 @@ By utilizing the capabilities of Lincheck, we can conduct tests on some of the m
 
 TODO
 
+## Sources of nondeterminism
+
+TODO
+
+# Libraries Tested
+
+TODO intro
+
+## Guava
+
+TODO
+
+## Multiverse
+
+TODO
+
+## FastUtil
+
+TODO
+
 # Test Setup
 
 For the tests we use a Windows 11 and a macOS machine with 16 and 64 gb of RAM. This allows us to test the selected data structures in complex scenarios, leveraging up to 16gb of JVM memory.
 
 We use the latest version of all libraries tested and Lincheck as of 17th of April 2024.
-# Experiments
 
 # Results
 
+TODO
 
 # Conclusion
 
