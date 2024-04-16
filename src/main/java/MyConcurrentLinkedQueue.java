@@ -355,7 +355,9 @@ public class MyConcurrentLinkedQueue<E> extends AbstractQueue<E>
             Node<E> q = p.next;
             if (q == null) {
                 // p is last node
-                if (NEXT.compareAndSet(p, null, newNode)) {
+//                if (NEXT.compareAndSet(p, null, newNode)) {
+                if (p.next == null) {
+                    p.next = newNode;
                     // Successful CAS is the linearization point
                     // for e to become an element of this queue,
                     // and for newNode to become "live".
