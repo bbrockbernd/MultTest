@@ -2,7 +2,6 @@ import it.unimi.dsi.fastutil.BigArrays
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
 import org.jetbrains.kotlinx.lincheck.check
-import org.jetbrains.kotlinx.lincheck.paramgen.IntGen
 import org.jetbrains.kotlinx.lincheck.paramgen.LongGen
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
@@ -12,6 +11,7 @@ import java.util.concurrent.atomic.AtomicIntegerArray
 @Param(name = "index", gen = LongGen::class, conf = "0:5")
 class FastUtilBigArraysTest {
     private val array: Array<AtomicIntegerArray> = Array(5) { AtomicIntegerArray(5) }
+    private val normal_array: Array<IntArray> = Array(5) { IntArray(5) }
 
     @Operation
     fun addAndGet(@Param(name = "index") index: Long, value: Int) {
@@ -51,6 +51,26 @@ class FastUtilBigArraysTest {
     @Operation
     fun compareAndSet(@Param(name = "index") index: Long, value: Int, expected: Int) {
         BigArrays.compareAndSet(array, index, expected, value)
+    }
+
+    @Operation
+    fun add(@Param(name = "index") index: Long, value: Int) {
+        BigArrays.add(normal_array, index, value)
+    }
+
+    @Operation
+    fun decr(@Param(name = "index") index: Long) {
+        BigArrays.decr(normal_array, index)
+    }
+
+    @Operation
+    fun incr(@Param(name = "index") index: Long) {
+        BigArrays.incr(normal_array, index)
+    }
+
+    @Operation
+    fun mul(@Param(name = "index") index: Long, value: Int) {
+        BigArrays.mul(normal_array, index, value)
     }
 
     @Test
