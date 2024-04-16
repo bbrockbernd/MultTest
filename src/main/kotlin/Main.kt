@@ -7,6 +7,7 @@ import org.multiverse.api.references.TxnInteger
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger
 
 fun main() {
+    
     val queue: MyConcurrentLinkedQueue<Int> = MyConcurrentLinkedQueue()
     val nr: TxnInteger = GammaTxnInteger(0)
     val nr2: TxnInteger = GammaTxnInteger(0)
