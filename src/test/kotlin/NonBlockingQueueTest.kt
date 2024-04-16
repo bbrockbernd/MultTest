@@ -1,10 +1,10 @@
-import com.google.common.util.concurrent.AtomicDoubleArray
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.paramgen.IntGen
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
 import org.junit.Test
+import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -67,7 +67,7 @@ class NonBlockingQueue<T> {
 
 @Param(name = "value", gen = IntGen::class, conf = "1:2")
 class ConcurrentLinkedQueueTest {
-    private val queue: ConcurrentLinkedQueue<Int> = ConcurrentLinkedQueue()
+    private val queue: MyConcurrentLinkedQueue<Int> = MyConcurrentLinkedQueue()
 
     @Operation
     fun add(@Param(name = "value") value: Int) {
@@ -109,3 +109,4 @@ class NonBlockingQueueTest {
         ModelCheckingOptions().check(this::class)
     }
 }
+
