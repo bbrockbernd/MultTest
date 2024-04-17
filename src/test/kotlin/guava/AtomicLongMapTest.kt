@@ -1,3 +1,5 @@
+package guava
+
 import com.google.common.util.concurrent.AtomicLongMap
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param

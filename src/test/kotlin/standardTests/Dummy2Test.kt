@@ -1,35 +1,36 @@
+package standardTests
+
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingOptions
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
-import org.multiverse.api.references.TxnRef
-import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef
 
-class TxnRefTest {
-    private lateinit var ref: TxnRef<Int>
+class Dummy2Test {
+    private var value = 0
+
+//    @Operation
+//    fun inc() {
+//        value++
+//    }
+//
+//    @Operation
+//    fun dec() {
+//        value--
+//    }
     
     @Operation
     fun set(value: Int) {
-        ref.set(value)
+        this.value = value
     }
-    
     @Operation
     fun get(): Int {
-        return ref.get()
+        return value
     }
-    
+
     @Test
-    fun stressTest() {
-        ref = GammaTxnRef<Int>(0)
-        StressOptions().check(this::class)
-    }
-    
-    @Test
-    fun modelTest() {
-        ref = GammaTxnRef<Int>(0)
+    fun Test() {
         ModelCheckingOptions().check(this::class)
     }
-    
-    
+
 }

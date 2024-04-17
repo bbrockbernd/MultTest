@@ -1,3 +1,5 @@
+package fastutiltests
+
 import it.unimi.dsi.fastutil.BigArrays
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
