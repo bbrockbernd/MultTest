@@ -15,6 +15,11 @@ class AtomicLongMapTest {
     fun put(@Param(name = "key") key: String, value: Long) {
         map.put(key, value)
     }
+    
+    @Operation
+    fun addAndGet(@Param(name = "key") key: String, value: Long): Long {
+        return map.addAndGet(key, value)
+    }
 
     @Operation
     fun get(@Param(name = "key") key: String): Long {

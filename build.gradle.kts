@@ -10,11 +10,12 @@ repositories {
 }
 
 dependencies {
+    implementation("org.multiverse:multiverse-core:0.7.0")
+    implementation("com.google.guava:guava:33.1.0-jre")
+    implementation("org.agrona:Agrona:0.9.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlinx:lincheck:2.28")
-    implementation("org.multiverse:multiverse-core:0.7.0")
     testImplementation("junit:junit:4.13")
-    implementation("com.google.guava:guava:30.1-jre")
 }
 
 kotlin {
