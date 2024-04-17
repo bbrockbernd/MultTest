@@ -1,3 +1,5 @@
+package guava
+
 import com.google.common.util.concurrent.AtomicDouble
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
