@@ -1,3 +1,5 @@
+package guava
+
 import com.google.common.util.concurrent.AtomicDoubleArray
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
@@ -25,7 +27,6 @@ class AtomicDoubleArrayTest {
     fun addAndGet(@Param(name = "index") index: Int, delta: Double): Double {
         return array.addAndGet(index, delta)
     }
-    
     @Operation
     fun length(): Int {
         return array.length()

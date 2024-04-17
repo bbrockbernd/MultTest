@@ -1,3 +1,5 @@
+package guava
+
 import com.google.common.util.concurrent.AtomicLongMap
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.annotations.Param
@@ -14,6 +16,11 @@ class AtomicLongMapTest {
     @Operation
     fun put(@Param(name = "key") key: String, value: Long) {
         map.put(key, value)
+    }
+    
+    @Operation
+    fun addAndGet(@Param(name = "key") key: String, value: Long): Long {
+        return map.addAndGet(key, value)
     }
 
     @Operation

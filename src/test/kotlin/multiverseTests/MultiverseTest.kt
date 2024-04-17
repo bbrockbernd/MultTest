@@ -1,3 +1,5 @@
+package multiverseTests
+
 import org.jetbrains.kotlinx.lincheck.annotations.Operation
 import org.jetbrains.kotlinx.lincheck.check
 import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelCheckingCTest
@@ -9,10 +11,9 @@ import org.multiverse.api.callables.TxnCallable
 import org.multiverse.api.references.TxnInteger
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger
 
-@ModelCheckingCTest
 class MultiverseTest {
 
-    private lateinit var nr: TxnInteger
+    public lateinit var nr: TxnInteger
 
     @Operation
     fun increment() = StmUtils.atomic(TxnCallable { nr.increment() })
