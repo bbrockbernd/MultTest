@@ -83,7 +83,10 @@ Similarly to TxnInteger we approached TxnRef and we did not encounter any bugs f
 
 ## FastUtil
 
-TODO
+FastUtil is a Java library that provides fast and memory-efficient implementations of various collection classes, such as lists, sets, maps, and priority queues. It is designed to offer improved performance as compared to the standard Java collections framework by utilizing specialized data structures and optimized algorithms. FastUtil emphasizes minimal memory overhead and high performance, making it particularly well-suited for scenarios where performance is critical, such as large-scale data processing or high-throughput applications. The library is widely used in projects requiring efficient data structures and algorithms in Java.
+
+### BigArrays
+Despite the emphasis on performance, there are few data structures that utilize concurrency, and most of them can be challenging to set up correctly. Therefore, we tested only one data structure, called BigArrays, which uses a matrix to represent a very large array. However, we conducted more complex tests by testing BigArrays on two types of data, Integer and AtomicInteger. We also tested all available operations, such as set, get, add, multiply, increment, and decrement, leading to longer tests that interleave most permutations of these operations. Nevertheless, this test did not uncover any bugs in the implementation, but it took twice as long as simpler tests with fewer operations. This indicates that Lincheck's completion time is directly proportional to the number of operations considered.
 
 ## Agrona
 
