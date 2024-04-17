@@ -34,14 +34,30 @@ For the tests we use a Windows 11 and a macOS machine with 16 and 64 gb of RAM. 
 
 We use the latest version of all libraries tested and Lincheck as of 17th of April 2024.
 
+TODO
 
 ## Bug Injection Test
 
-TODO
+In order to showcase how Lincheck works in a very simple setting and to prove that it easily detects the appearance of a bug, we will test java.util.concurrent.ConcurrentLinkedQueue and we will also test a version of it in which we inject a bug.
 
+## The bug
+
+We copy the implementation of ConcurrentLinkedQueue and we modify the method with which you add a new value to the queue. The current implementation uses CAS(compareAndSet) to update the next pointer between nodes. This ensures that the operation is atomic and the node that creates the connection is not deleted by a thread in the meantime. By changing this to a much simpler if then statement that is not atomic we inject the bug.
+
+```kotlin
+//  if (NEXT.compareAndSet(p, null, newNode)) {
+    if (p.next == null) {
+        p.next = newNode;
+```
+
+# The experiment result
+
+By running the data structure from java.util we are not able to find any bugs and the test passes in around 2 minutes. On the other side, running the implementation with the injected bug leads to a test failure in around 10 seconds due to the non-atomicity of the add operation, allowing the linking with a node previously removed.
+
+![Execution Trace](\images\injected_bug.png)
 # Related Work
 
-TODO
+Lincheck is a tool used for checking linearizability and other concurrency properties, being remarkable for its user-friendliness [2]. Compared to other similar tools like [JCStress](https://github.com/openjdk/jcstress), CHESS (Line-Up), and [GenMC](https://github.com/MPI-SWS/genmc), Lincheck stands out due to its exceptional ease of use. JCStress, while offering robust capabilities, can be challenging for users due to its non-declarative nature [3]. CHESS (Line-Up) is tailored for C# environments and uses Bounded Model Checking to verify properties like linearizability in a very similar manner to Lincheck [4]. GenMC has advanced features, but its ease of expansion is a drawback, which Lincheck is addressing by integrating the GenMC algorithm into its system [5]. Lincheck's most significant strength lies in its accessibility and simplicity. Its straightforward interface and streamlined process empower users to assess linearizability effortlessly without needing to deal with steep learning curves or intricate configurations. In the field of concurrent systems, where precision and efficiency are critical, Lincheck's user-friendly approach makes it an excellent choice for those seeking seamless verification.
 
 # Results
 
@@ -53,7 +69,17 @@ TODO
 
 ## Multiverse
 
-TODO
+Multiverse is a powerful Java concurrency library that simplifies the development of multithreaded applications. It comes equipped with a range of tools including atomic variables, lock-free data structures, and fine-grained locking mechanisms. The standout feature of Multiverse is its software transactional memory (STM), which ensures data consistency by encapsulating operations within transactions. This means that operations are either committed as a whole or rolled back in case of failure, similar to database transactions. By using this approach, Multiverse minimizes contention and simplifies complex concurrent operations. This level of control over shared data allows developers to create scalable, error-resilient applications, reducing the risks associated with race conditions and deadlocks that often occur in concurrent programming.
+
+### TxnInteger
+
+In order to test the correctness of this data structure we passed as operations to Lincheck the methods for incrementing and decrementing. Since these operations are implemented to be atomic we were not expecting to find any bugs, but, surprisingly we discovered a bug in Lincheck and we notified the developer about it.
+
+![Lincheck Bug](/images/lincheck_bug.png)
+
+### TxnRef
+
+Similarly to TxnInteger we approached TxnRef and we did not encounter any bugs from either Lincheck or the data structure, obtaining a test pass that means that the operations used(set, get) are atomic and lead to a linearizable implementation.
 
 ## FastUtil
 
