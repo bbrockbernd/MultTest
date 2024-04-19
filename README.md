@@ -25,8 +25,43 @@ At its core, Lincheck leverages state-of-the-art techniques to systematically ex
 By utilizing the capabilities of Lincheck, we can conduct tests on some of the most commonly used Java concurrent libraries to confirm their linearizability through the model-checking functionality. If no problems are detected, we can confidently declare that the possibility of concurrency bugs occurring in practical situations is extremely low. However, if any issues are found, we aim to report them, so that they can be fixed in future versions of the libraries being tested.
 
 ## The bug detection technique
+Lincheck tests for linearizability of datastructures in a three step process. This is done by first randomly creating a set of concurrent scenarios, then executing each concurrent scenario in different orders and lastly verifying that each execution is linearizable.
 
-TODO
+### Generate
+We provide lincheck with a set of operations that can be performed on the datastructure under test. For instance, a concurrent queue has operations like `poll()`, `peek()` and `add()`. Lincheck will then generate concurrent scenarios, sort of little multithreaded programs. By default, lincheck generates 100 of such scenarios per test.
+
+| Thread 1 | Thread 2 | 
+|----------|----------|
+| poll()   | add()    |
+| add()    | peek()   |
+|          | add()    |
+
+
+### Execute
+Each of the generated concurrent little program is then executed 10.000 times. Lincheck has two strategies for this phase: _Stress_ and _Model Check_.
+
+A stress test executes each program over and over, relying on the non-determinism of the scheduler. The model checker instruments the java bytecode to control context switches of the threads. Basically allowing lincheck to choose and explore execution schedules.
+
+Then lincheck records all the outputs of all the operations. For instance, a `poll()` can return a value or null, and `add()` returns true or false if the operation was successful or not. 
+
+| Thread 1     | Thread 2     | 
+|--------------|--------------|
+| poll(): 1    | add(1): true |
+| add(2): true | peek(): 2    |
+|              | add(3): true |
+
+
+### Verify
+After in total one million executions, Lincheck verifies each found execution by looking for a sequential execution that could lead to the outcomes of this specific concurrent execution.
+
+| Thread 1     | Thread 2     | 
+|--------------|--------------|
+|              | add(1): true |
+| poll(): 1    |              |
+| add(2): true |              |
+|              | peek(): 2    |
+|              | add(3): true |
+
 
 ## Test Setup
 
@@ -47,7 +82,8 @@ We copy the implementation of ConcurrentLinkedQueue and we modify the method wit
 ```kotlin
 //  if (NEXT.compareAndSet(p, null, newNode)) {
     if (p.next == null) {
-        p.next = newNode;
+        p.next = newNode
+    }
 ```
 
 # The experiment result
@@ -64,8 +100,14 @@ Lincheck is a tool used for checking linearizability and other concurrency prope
 TODO intro
 
 ## Guava
+[Guava](https://github.com/google/guava) is a Java library developed and maintained by Google. It provides additional collection types and utilities. In particular, it provides the following concurrent data structures:
 
-TODO
+- AtomicDoubleArray
+- AtomicDouble
+- ConcurrentHashMultiset
+
+In the `ConcurrentHashMultiset` we discovered a bug. As shown in the figure below this non linearizable execution occurs when an added value gets removed simultaneously 
+![Guava-bug](/images/guava_bug.png)
 
 ## Multiverse
 
