@@ -192,7 +192,7 @@ Where we directly see a problem is that the queue in the tests is defined to hav
 
 # Conclusion
 
-TODO
+Through our investigation of linearizability correctness in concurrency libraries using Lincheck, we have gained significant insights into the reliability of various data structures. Our tests have revealed subtle bugs in implementations, such as Guava's ConcurrentHashMultiset, and highlighted unexpected behaviors, like non-linear executions in Agrona's OneToOneArrayQueue. These findings emphasize the importance of thorough testing in concurrent systems. Lincheck's user-friendly approach has been invaluable in uncovering these issues and demonstrating its effectiveness in verifying linearizability. We are pleased to have found a bug in this tool and reported it so that it can be improved further. Additionally, we plan to collaborate with the developers of the frameworks from which we discovered bugs, to address these findings and enhance the current implementations.
 
 # References
 
