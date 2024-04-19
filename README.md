@@ -69,7 +69,7 @@ For the tests we use a Windows 11 and a macOS machine with 16 and 64 gb of RAM. 
 
 We use the latest version of all libraries tested and Lincheck as of 17th of April 2024.
 
-TODO
+Another important aspect we took into account was the configuration we ran Lincheck with. After consulting with the author, we decided to run it with the basic parameters as these would suffice our testing needs.
 
 ## Bug Injection Test
 
