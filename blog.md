@@ -54,7 +54,7 @@ We copy the implementation of ConcurrentLinkedQueue and we modify the method wit
 
 By running the data structure from java.util we are not able to find any bugs and the test passes in around 2 minutes. On the other side, running the implementation with the injected bug leads to a test failure in around 10 seconds due to the non-atomicity of the add operation, allowing the linking with a node previously removed.
 
-![Execution Trace](\images\injected_bug.png)
+![Execution Trace](/images/injected_bug.png)
 # Related Work
 
 Lincheck is a tool used for checking linearizability and other concurrency properties, being remarkable for its user-friendliness [2]. Compared to other similar tools like [JCStress](https://github.com/openjdk/jcstress), CHESS (Line-Up), and [GenMC](https://github.com/MPI-SWS/genmc), Lincheck stands out due to its exceptional ease of use. JCStress, while offering robust capabilities, can be challenging for users due to its non-declarative nature [3]. CHESS (Line-Up) is tailored for C# environments and uses Bounded Model Checking to verify properties like linearizability in a very similar manner to Lincheck [4]. GenMC has advanced features, but its ease of expansion is a drawback, which Lincheck is addressing by integrating the GenMC algorithm into its system [5]. Lincheck's most significant strength lies in its accessibility and simplicity. Its straightforward interface and streamlined process empower users to assess linearizability effortlessly without needing to deal with steep learning curves or intricate configurations. In the field of concurrent systems, where precision and efficiency are critical, Lincheck's user-friendly approach makes it an excellent choice for those seeking seamless verification.
