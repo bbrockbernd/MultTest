@@ -186,7 +186,10 @@ Now to be fair, the documentation of Agrona states that the poll operations can 
 ### Drain
 According to the documentation the drain operation is an operation that polls all values from the queue which are in the queue from the moment it started.
 
+Where we directly see a problem is that the queue in the tests is defined to have a length of 3. However this drain returns 4 values. The only explanation is that value can be added while the drain is in progress. 
 ![img.png](images/drain-bug.png)
+
+
 # Conclusion
 
 TODO
