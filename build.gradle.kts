@@ -10,9 +10,13 @@ repositories {
 }
 
 dependencies {
+    // Libraries under test
     implementation("org.multiverse:multiverse-core:0.7.0")
     implementation("com.google.guava:guava:33.1.0-jre")
     implementation("org.agrona:Agrona:0.9.1")
+    implementation("it.unimi.dsi:fastutil:8.5.13")
+    
+    // Testing utilities
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlinx:lincheck:2.28")
     testImplementation("junit:junit:4.13")
