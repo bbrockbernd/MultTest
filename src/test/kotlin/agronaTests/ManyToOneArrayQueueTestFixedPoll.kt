@@ -8,13 +8,25 @@ import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
 
 // Test but fixing the non sequential poll with a busy wait
-class ManyToOneArrayQueueTest {
+class ManyToOneArrayQueueTestFixedPoll {
 
     private val queue = ManyToOneConcurrentArrayQueue<Int>(3)
 
     @Operation(nonParallelGroup = "consumers")
     fun poll(): Int? {
-        return queue.poll()
+        if (queue.size == 0) return null
+        var x = queue.poll()
+        while (x == null) {
+            x = queue.poll()
+        }
+        return x
+    }
+
+    @Operation(nonParallelGroup = "consumers")
+    fun drain(): String {
+        val list = mutableListOf<Int>()
+        val nEls = queue.drain { el: Int -> list.add(el) }
+        return "${list.toIntArray().contentToString()} n = $nEls"
     }
 
     @Operation
@@ -31,6 +43,6 @@ class ManyToOneArrayQueueTest {
     fun stressTest() {
         StressOptions().check(this::class)
     }
-
+    
 
 }

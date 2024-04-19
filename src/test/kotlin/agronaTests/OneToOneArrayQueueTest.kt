@@ -16,6 +16,13 @@ class OneToOneArrayQueueTest {
         return queue.poll()
     }
 
+    @Operation(nonParallelGroup = "consumers")
+    fun drain(): String {
+        val list = mutableListOf<Int>()
+        val nEls = queue.drain { el: Int -> list.add(el) }
+        return "${list.toIntArray().contentToString()} n = $nEls"
+    }
+
     @Operation(nonParallelGroup = "producers")
     fun offer(int: Int): Boolean {
         return queue.offer(int)

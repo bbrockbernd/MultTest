@@ -7,14 +7,18 @@ import org.jetbrains.kotlinx.lincheck.strategy.managed.modelchecking.ModelChecki
 import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.Test
 
-// Test but fixing the non sequential poll with a busy wait
-class ManyToOneArrayQueueTest {
+class ManyToManyArrayQueueTest {
 
     private val queue = ManyToOneConcurrentArrayQueue<Int>(3)
 
-    @Operation(nonParallelGroup = "consumers")
+    @Operation
     fun poll(): Int? {
         return queue.poll()
+    }
+
+    @Operation
+    fun size(): Int {
+        return queue.size
     }
 
     @Operation
@@ -31,6 +35,5 @@ class ManyToOneArrayQueueTest {
     fun stressTest() {
         StressOptions().check(this::class)
     }
-
 
 }

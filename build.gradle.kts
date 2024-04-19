@@ -13,7 +13,7 @@ dependencies {
     // Libraries under test
     implementation("org.multiverse:multiverse-core:0.7.0")
     implementation("com.google.guava:guava:33.1.0-jre")
-    implementation("org.agrona:Agrona:0.9.1")
+    implementation("org.agrona:agrona:1.21.1")
     implementation("it.unimi.dsi:fastutil:8.5.13")
     
     // Testing utilities
