@@ -97,7 +97,7 @@ Lincheck is a tool used for checking linearizability and other concurrency prope
 
 # Results
 
-TODO intro
+We have selected and tested 4 opensource libraries that provide concurrent datastructures for the JVM.
 
 ## Guava
 [Guava](https://github.com/google/guava) is a Java library developed and maintained by Google. It provides additional collection types and utilities. In particular, it provides the following concurrent data structures:
@@ -106,8 +106,33 @@ TODO intro
 - AtomicDouble
 - ConcurrentHashMultiset
 
-In the `ConcurrentHashMultiset` we discovered a bug. As shown in the figure below this non linearizable execution occurs when an added value gets removed simultaneously 
+In the `ConcurrentHashMultiset` we discovered a bug. A Multiset is a set that accepts multiple occurrences of the same value. As shown in the figure below this non linearizable execution occurs when an added value gets removed simultaneously, and on one thread a setCount operations is executed. The `setCount(element, oldCount, newCount)` operation is an operation that for an `element` compares the current value with `oldValue` and if true replaces the value with `newCount`.
 ![Guava-bug](/images/guava_bug.png)
+As you can see in Thread 2 a remove operation is performed and returns false, meaning that there was no value to be removed and thus the count for element _a_ is 0. The only valid sequential execution for the first three operations is the following: 
+
+| Thread 1         | Thread 2                 | 
+|------------------|--------------------------|
+| add(a): true     |                          |
+| remove(a) : true |                          |
+|                  | remove(a): false         |
+|                  | setCount(a, 0, 1): false |
+
+However, with the 4th operation this is not sequentially consistent. There is no other option than that the counter is 0 and `setCount` should update and return true. Or in other words if `setCount(a, 0, 1)` returns false, that means that the set is not empty for _a_. Which is inconsistent with `remove(a): false)` and only one item has been added before the concurrent part started.
+
+How can this happen you ask? The multiset is under the hood implemented as a `ConcurrentHashMap` where the keys are the elements of the set and the values are how often this element occurs in the set. In the remove function of `ConcurrentHashMultiset` is a check that removes the the key value entry from the map when the counter reaches 0. This cleaning operation makes sense, otherwise longlasting multisets could keep growing the underlying hashmap.
+```java
+ if (newValue == 0) {
+    countMap.remove(element, existingCounter);
+}
+```
+
+However this remove operation can interfere with the way the `setCount` operation works. This `setCount` first makes a `putIfAbsent` call to place the element in the map if. If there was not a value before we return null, however if there was a value before we perform a replace action where we replace the old counter with the new counter. This is un unironically to prevent data races, where the old value might have changed and we dont want to override a change that has been made.
+```java
+return (countMap.putIfAbsent(element, newCounter) == null)
+        || countMap.replace(element, existingCounter, newCounter);
+```
+
+In the case of this specific execution, it is possible that the `remove` action removes the key value pair inbetween the `putIfAbsent` and `replace` which would in turn return false. And thus resulting in the non linearizable execution we found.
 
 ## Multiverse
 
@@ -131,9 +156,37 @@ FastUtil is a Java library that provides fast and memory-efficient implementatio
 Despite the emphasis on performance, there are few data structures that utilize concurrency, and most of them can be challenging to set up correctly. Therefore, we tested only one data structure, called BigArrays, which uses a matrix to represent a very large array. However, we conducted more complex tests by testing BigArrays on two types of data, Integer and AtomicInteger. We also tested all available operations, such as set, get, add, multiply, increment, and decrement, leading to longer tests that interleave most permutations of these operations. Nevertheless, this test did not uncover any bugs in the implementation, but it took twice as long as simpler tests with fewer operations. This indicates that Lincheck's completion time is directly proportional to the number of operations considered.
 
 ## Agrona
+Agrona is a library supporting fast and scalable concurrent systems. This library has some concurrent datastructures as well:
 
-TODO
+- OneToOneArrayQueue
+- ManyToOneArrayQueue
+- ManyToManyArrayQueue
 
+OneToOne meaning one producer and one consumer, in other words one thread on the reading side and one thread on the writing side etc.
+
+These datastructures have some non-linear executions as well, one having to do with their poll (and similarly peek) operations and one to do with the drain operation.
+
+### Poll
+In the illustration below in Thread 1 you can see that there is an offer() which is successful and afterwards a poll operation that fails. While in the rest of the program there are no other poll operations. This is no sequentially consistent.
+![Agrona-poll-bug](/images/agrona_bug1.png)
+
+What happened? The offer operation first increments the tail position (which keeps track of the end of the queue) and then places the value. This does not happen atomically. This allows for the following execution:
+
+- First an empty queue with head and tail at the same position
+- Second, Thread 2 starts offering a value and increments tail
+- Third, Thread 1 starts offering and increments tail again (now has value 2)
+- Fourth, Thread 1 places value at position 1.
+
+Now it becomes clear that thread one can place a value (which happens to not be at the first position) and than fails to poll a value.
+
+![img.png](images/agrona-bug-example.png)
+
+Now to be fair, the documentation of Agrona states that the poll operations can be sequentially inconsistent when an offer is still in progress. They prefer to return null over busy waiting, which can be a valid design choice in high throughput scenarios.
+
+### Drain
+According to the documentation the drain operation is an operation that polls all values from the queue which are in the queue from the moment it started.
+
+![img.png](images/drain-bug.png)
 # Conclusion
 
 TODO
